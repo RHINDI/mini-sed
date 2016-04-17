@@ -11,38 +11,36 @@ end
 
 include GLI::App
 
-program_desc 'Describe your application here'
+program_desc 'Programme qui emule sed -- de facon (tres) simplifiee'
 
 version MiniSed::VERSION
 
 subcommand_option_handling :normal
 arguments :strict
 
-desc 'Describe some switch here'
-switch [:s,:switch]
+desc 'Execution sans emission par defaut des ligne traitees sur la sortie'
+switch [:q,:quiet]
 
-desc 'Describe some flag here'
-default_value 'the default'
-arg_name 'The name of the argument'
-flag [:f,:flagname]
+desc 'Execution avec modification directe du fichier traite'
+arg_name 'extension'
+flag [:i,:in_place]
 
-desc 'Describe substitute here'
-arg_name 'Describe arguments to substitute here'
+desc 'Substitue un mofif par un chaine dans les lignes'
+arg_name 'motif chaine [fichier...]'
 command :substitute do |c|
-  c.desc 'Describe a switch to substitute'
-  c.switch :s
+  c.desc 'Substitution globale'
+  c.switch :g
 
-  c.desc 'Describe a flag to substitute'
-  c.default_value 'default'
-  c.flag :f
   c.action do |global_options,options,args|
+    quiet = '--quiet ' if global_options[:quiet]
+    in_place = "--in-place='#{global_options[:in_place]}" if global_options[:in_place]
+    global = 'g' if options[:g]
+    motif = args.shift
+    chaine = args.shift
 
-    # Your command logic here
-     
-    # If you have any errors, just raise them
-    # raise "that command made no sense"
-
-    puts "substitute command ran"
+    puts "sed #{in_place}#{quiet}" <<
+        "'s/#{motif}// #{chaine}/'"<<
+        " #{args.join( ' ')}"
   end
 end
 
