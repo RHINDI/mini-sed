@@ -38,9 +38,10 @@ command :substitute do |c|
     motif = args.shift
     chaine = args.shift
 
-    puts "sed #{in_place}#{quiet}" <<
-        "'s/#{motif}// #{chaine}/'"<<
-        " #{args.join( ' ')}"
+    fichiers = args.empty? ? [IO] : args.map{|f| File.open(f)}
+    fichiers.each do |f|
+      puts MiniSed.substitute(quiet, motif,chaine, global,f.readlines)
+    end
   end
 end
 
