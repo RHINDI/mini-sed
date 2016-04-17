@@ -22,6 +22,7 @@ desc 'Execution sans emission par defaut des ligne traitees sur la sortie'
 switch [:q,:quiet]
 
 desc 'Execution avec modification directe du fichier traite'
+default_value ''
 arg_name 'extension'
 flag [:i,:in_place]
 
@@ -34,7 +35,7 @@ command :substitute do |c|
   c.action do |global_options,options,args|
     quiet = '--quiet ' if global_options[:quiet]
     in_place = "--in-place='#{global_options[:in_place]}" if global_options[:in_place]
-    global = 'g' if options[:g]
+    global = 'g'if options[:g]
     motif = args.shift
     chaine = args.shift
 
